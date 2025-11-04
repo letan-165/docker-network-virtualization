@@ -30,6 +30,9 @@ services:
       dockerfile: Dockerfile.post
     container_name: post-service
     restart: always
+    user: root
+    cap_add:
+      - NET_ADMIN
     ports:
       - "8081:8081"
     environment:

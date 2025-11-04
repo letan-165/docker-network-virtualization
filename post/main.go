@@ -152,7 +152,12 @@ func checkUserExists(userID string) (bool, error) {
 	}
 
 	url := fmt.Sprintf("%s/users/exists/%s", userServiceURL, userID)
-	resp, err := http.Get(url)
+
+	client := &http.Client{
+		Timeout: 3 * time.Second,
+	}
+
+	resp, err := client.Get(url)
 	if err != nil {
 		return false, err
 	}
@@ -169,3 +174,4 @@ func checkUserExists(userID string) (bool, error) {
 
 	return result.Exists, nil
 }
+
