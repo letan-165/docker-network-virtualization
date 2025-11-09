@@ -26,7 +26,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017
       - PORT=8081
-      - USER_SERVICE_URL=${USER_SERVICE_URL}
+      - USER_SERVICE_URL=http://user-service:8080
     depends_on:
       - mongo
     networks:
