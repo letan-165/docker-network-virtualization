@@ -9,6 +9,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - demo_overlay
 
   post-service:
     build:
@@ -22,11 +24,17 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - MONGO_URI: mongodb://mongo:27017
-      - PORT: 8081
-      - USER_SERVICE_URL:
+      - MONGO_URI=mongodb://mongo:27017
+      - PORT=8081
+      - USER_SERVICE_URL=${USER_SERVICE_URL}
     depends_on:
       - mongo
+    networks:
+      - demo_overlay
+
+networks:
+  demo_overlay:
+    external: true
 
 volumes:
   mongo_data:
