@@ -12,8 +12,6 @@ services:
     environment:
       - MONGO_URI:
       - PORT: 8080
-    depends_on:
-      - mongo
 
   nginx:
     build: ./nginx
@@ -28,6 +26,3 @@ services:
       POST_SERVICE_PORT:
     depends_on:
       - user-service
-
-volumes:
-  mongo_data:
