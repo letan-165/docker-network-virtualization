@@ -41,14 +41,19 @@ services:
       - USER_SERVICE_URL=http://user-service:8080
     depends_on:
       - mongo
+      - user-service
 
   nginx:
-    image: nginx:latest
+    build: ./nginx
     container_name: nginx-gateway
+    restart: always
     ports:
       - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      USER_SERVICE_HOST: user-service
+      USER_SERVICE_PORT: 8080
+      POST_SERVICE_HOST: post-service
+      POST_SERVICE_PORT: 8081
     depends_on:
       - user-service
       - post-service
