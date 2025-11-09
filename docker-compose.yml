@@ -1,15 +1,6 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongo-tttn
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
   user-service:
     build:
       context: ./user
@@ -19,29 +10,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - MONGO_URI=mongodb://mongo:27017
-      - PORT=8080
+      - MONGO_URI:
+      - PORT: 8080
     depends_on:
       - mongo
-
-  post-service:
-    build:
-      context: ./post
-      dockerfile: Dockerfile.post
-    container_name: post-service
-    restart: always
-    user: root
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - "8081:8081"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017
-      - PORT=8081
-      - USER_SERVICE_URL=http://user-service:8080
-    depends_on:
-      - mongo
-      - user-service
 
   nginx:
     build: ./nginx
@@ -52,11 +24,10 @@ services:
     environment:
       USER_SERVICE_HOST: user-service
       USER_SERVICE_PORT: 8080
-      POST_SERVICE_HOST: post-service
-      POST_SERVICE_PORT: 8081
+      POST_SERVICE_HOST:
+      POST_SERVICE_PORT:
     depends_on:
       - user-service
-      - post-service
 
 volumes:
   mongo_data:
