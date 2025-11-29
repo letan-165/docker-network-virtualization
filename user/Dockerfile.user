@@ -1,5 +1,7 @@
 FROM golang:1.25-alpine
 
+RUN apk add --no-cache iptables iproute2 iputils
+
 WORKDIR /app
 
 COPY go.mod go.sum ./
