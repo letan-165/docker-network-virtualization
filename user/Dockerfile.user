@@ -11,4 +11,6 @@ COPY . .
 
 RUN go build -o user-service
 
+USER root
+
 CMD ["./user-service"]
