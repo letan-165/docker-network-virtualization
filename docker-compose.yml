@@ -9,6 +9,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - mynet
 
   user-service:
     build:
@@ -23,6 +25,8 @@ services:
       - PORT=8080
     depends_on:
       - mongo
+    networks:
+      - mynet
 
   post-service:
     build:
@@ -42,6 +46,8 @@ services:
     depends_on:
       - mongo
       - user-service
+    networks:
+      - mynet
 
   nginx:
     build: ./nginx
@@ -57,6 +63,8 @@ services:
     depends_on:
       - user-service
       - post-service
+    networks:
+      - mynet
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -72,6 +80,8 @@ services:
       - /cgroup:/cgroup:ro
     environment:
       - CADVISOR_USE_HOSTNAME_LABEL=true
+    networks:
+      - mynet
 
   prometheus:
     image: prom/prometheus:latest
@@ -83,6 +93,8 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - cadvisor
+    networks:
+      - mynet
 
   grafana:
     image: grafana/grafana:latest
@@ -95,6 +107,12 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+    networks:
+      - mynet
 
 volumes:
   mongo_data:
+
+networks:
+  mynet:
+    driver: bridge
