@@ -32,6 +32,23 @@ services:
     networks:
       - demo_overlay
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: always
+    ports:
+      - "8082:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    environment:
+      - CADVISOR_USE_HOSTNAME_LABEL=true
+    networks:
+      - demo_overlay
+
 networks:
   demo_overlay:
     external: true
